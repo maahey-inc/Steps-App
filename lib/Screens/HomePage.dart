@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:steps_app/Provider/home_provider.dart';
 import 'package:steps_app/Screens/Homescreen.dart';
+import 'package:steps_app/Screens/More.dart';
 import 'package:steps_app/Screens/Readmainscreen.dart';
+import 'package:steps_app/Screens/Storemain.dart';
 import 'package:steps_app/Screens/Walkmain.dart';
 
 class HomePage extends StatelessWidget {
   //const HomePage({ Key? key }) : super(key: key);
-
+ 
   List widgetlist = [
     Walkmainscreen(),
     Readmainscreen(),
     Homescreen(),
-    Center(child: Text("Store Screen")),
-    Center(child: Text("Options Screen")),
+    Storemain(),
+    More(),
   ];
 
   @override

@@ -330,6 +330,7 @@ class Readmainscreen extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(10),
                               child: Stack(
+                                alignment: Alignment.center,
                                 children: [
                                   Image.network(
                                       "https://www.writersdigest.com/.image/t_share/MTcxMDY1ODEzNjY3MzU3OTU3/image-placeholder-title.jpg"),

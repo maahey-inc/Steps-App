@@ -1,6 +1,7 @@
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:health/health.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:steps_app/Screens/verificationcode.dart';
 import 'package:steps_app/Widgets/Button.dart';
@@ -8,8 +9,14 @@ import 'package:steps_app/theme.dart';
 
 import 'HomePage.dart';
 
-class UsernameScreen extends StatelessWidget {
-  //String selectedcountry;
+
+
+class UsernameScreen extends StatefulWidget {
+  @override
+  _UsernameScreenState createState() => _UsernameScreenState();
+}
+
+class _UsernameScreenState extends State<UsernameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,7 +158,9 @@ class UsernameScreen extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                      onpressed: () {},
+                                      onpressed: () {
+                                        // fetchData();
+                                      },
                                       color: Color(0xff333333),
                                       radius: 20,
                                     ),
@@ -243,6 +252,7 @@ class UsernameScreen extends StatelessWidget {
                                       ),
                                       onpressed: () {
                                         Navigator.pop(context);
+                                        // fetchData();
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(

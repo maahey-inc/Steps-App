@@ -3,7 +3,7 @@ import 'package:steps_app/Widgets/Button.dart';
 import 'package:steps_app/theme.dart';
 
 class Homescreen extends StatelessWidget {
-  const Homescreen({Key? key}) : super(key: key);
+  //const Homescreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

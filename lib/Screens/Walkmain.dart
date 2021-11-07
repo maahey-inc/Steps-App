@@ -1,9 +1,97 @@
 import 'package:flutter/material.dart';
+import 'package:health/health.dart';
 import 'package:steps_app/Widgets/Button.dart';
 
 import '../theme.dart';
 
-class Walkmainscreen extends StatelessWidget {
+enum AppState {
+  DATA_NOT_FETCHED,
+  FETCHING_DATA,
+  DATA_READY,
+  NO_DATA,
+  AUTH_NOT_GRANTED
+}
+
+class Walkmainscreen extends StatefulWidget {
+  @override
+  _WalkmainscreenState createState() => _WalkmainscreenState();
+}
+
+class _WalkmainscreenState extends State<Walkmainscreen> {
+  List<HealthDataPoint> _healthDataList = [];
+
+  AppState _state = AppState.DATA_NOT_FETCHED;
+
+  int steps = 0;
+
+  Future fetchData() async {
+    // get everything from midnight until now
+    DateTime startDate = DateTime.now().subtract(Duration(days: 1));
+    DateTime endDate = DateTime.now();
+
+    HealthFactory health = HealthFactory();
+
+    // define the types to get
+    List<HealthDataType> types = [
+      HealthDataType.STEPS,
+      HealthDataType.DISTANCE_DELTA,
+      HealthDataType.WEIGHT,
+      //HealthDataType.HEIGHT,
+      //HealthDataType.BLOOD_GLUCOSE,
+      //HealthDataType.DISTANCE_WALKING_RUNNING,
+    ];
+
+    //setState(() => _state = AppState.FETCHING_DATA);
+
+    print("getting Access");
+
+    // you MUST request access to the data types before reading them
+    bool accessWasGranted = await health.requestAuthorization(types);
+    print(accessWasGranted);
+    steps = 0;
+
+    if (accessWasGranted) {
+      try {
+        // fetch new data
+        List<HealthDataPoint> healthData =
+            await health.getHealthDataFromTypes(startDate, endDate, types);
+
+        // save all the new data points
+        _healthDataList.addAll(healthData);
+      } catch (e) {
+        print("Caught exception in getHealthDataFromTypes: $e");
+      }
+
+      // filter out duplicates
+      _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
+
+      Future.forEach(_healthDataList, (x) {
+        steps += x.value.round();
+      });
+      // print the results
+      setState(() {
+        steps = (steps + steps / 1.8).round();
+      });
+      print("Steps: ${steps + steps / 1.8}");
+
+      // update the UI to display the results
+      // setState(() {
+      //   _state =
+      //       _healthDataList.isEmpty ? AppState.NO_DATA : AppState.DATA_READY;
+      // });
+    } else {
+      print("Authorization not granted");
+      // setState(() => _state = AppState.DATA_NOT_FETCHED);
+    }
+  }
+
+  @override
+  void initState() {
+    fetchData();
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +142,7 @@ class Walkmainscreen extends StatelessWidget {
                             //fit: BoxFit.fill,
                           ),
                           Text(
-                            "1500",
+                            steps.round().toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
@@ -139,7 +227,8 @@ class Walkmainscreen extends StatelessWidget {
                             height: 10,
                           ),
                           Text(
-                            "1.2 Km",
+                            ((steps - steps / 1.8) / 1000).toStringAsFixed(2) +
+                                " Km",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),

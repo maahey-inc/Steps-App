@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:steps_app/theme.dart';
 
 class Button extends StatelessWidget {
-  late Function() onpressed;
-  late Widget child;
-  late Color color;
-  late double radius;
+  Function() onpressed;
+  Widget child;
+  Color color;
+  double radius;
   Button({
-    required this.child,
-    required this.onpressed,
+    @required this.child,
+    @required this.onpressed,
     this.color = darkgrey,
     this.radius = 10,
   });
